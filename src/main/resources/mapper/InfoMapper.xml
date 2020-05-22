@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangyanlong.mapper.InfoMapper">
+	
+	<sql id="sql">
+		SELECT i.*,t.`t_name` FROM `t_info` AS i LEFT JOIN `t_teacher` AS t ON t.`t_id`=i.`t_id` 
+	</sql>
+	<!-- 查询晒被信息表  根据宿舍编号  晒被状态  负责老师进行查询 -->
+	<select id="queryInfoByItem" parameterType="map" resultType="com.wangyanlong.beans.Info">
+		<include refid="sql"></include>
+		<where>
+			<if test="t_id!=null">
+				and i.t_id =#{t_id} 
+			</if>
+			<if test="i_status!=null">
+				and i.i_status=#{i_status} 
+			</if>
+			<if test="i_name!=null and i_name!=''">
+				and i.i_name=#{i_name} 
+			</if>
+		</where>
+		
+	</select>
+	<!-- 查询所有老师 -->
+	<select id="queryAllTeacher" resultType="com.wangyanlong.beans.Teacher">
+		select * from t_teacher
+	</select>
+	<!-- 添加 -->
+	<insert id="addInfo">
+		INSERT INTO `t_info`(i_name,i_uptime,i_status,t_id)VALUES(#{i_name},now(),0,#{t_id})
+	</insert>
+	<!-- 根据id查询晒被表 -->
+	<select id="queryInfoById" resultType="com.wangyanlong.beans.Info" parameterType="int">
+	    <include refid="sql"></include>
+		where i.i_id =#{i_id}
+	</select>
+	
+	<update id="changeInfo" parameterType="int">
+		update t_info set i_status=1,i_uptime=now() where i_id=#{i_id}
+	</update>
+	
+</mapper>
