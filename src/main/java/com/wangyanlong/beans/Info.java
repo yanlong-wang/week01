@@ -1,8 +1,9 @@
 package com.wangyanlong.beans;
 
 public class Info {
-
+    //晒被id
 	private int i_id;
+	//宿舍房间号
 	private String i_name;
 	private String i_uptime;
 	private int i_status;
